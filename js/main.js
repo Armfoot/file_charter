@@ -118,10 +118,11 @@ function changeDisplayedDays(y, m) {
 }
 
 function readFile(operatingFunc) {
-  let filePath = `data/${regionEl.value}-${
-    yearEl.value}.xls`;
-  for(let f of getElsByClass('fetched-file')) {
-    f.attributes.href.value = filePath;
+  let filePath = `data/${regionEl.value}-${yearEl.value}.xls`,
+      fileRefEls = getElsByClass('fetched-file');
+  // dynamically change href values that pointing to data-file
+  for (var i = fileRefEls.length - 1; i >= 0; i--) {
+    fileRefEls[i].attributes.href.value = filePath;
   }
 
   fetch(filePath)

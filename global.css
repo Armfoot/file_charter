@@ -184,6 +184,10 @@ header p {
   display: none;
 }
 
+.fcharter-select__wrapper select option {
+  background-color: #0275d8;
+}
+
 .fcharter-chart__section figure {
   background-color: #fefefe;
 }

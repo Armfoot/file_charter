@@ -41,5 +41,9 @@
     &::-ms-expand {
         display: none; // hide the default arrow in ie10 and ie11
     }
+
+    option {
+      background-color: $blue-dark;
+    }
   }
 }
