@@ -1,0 +1,43 @@
+.fcharter-chart__section {
+  figure {
+    background-color: $grey-lightest;
+  }
+}
+
+.fcharter-datatable__section {
+  $cell-pad: 0.3;
+
+  table {
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  th {
+    padding: #{$cell-pad * 2}rem;
+    color: white;
+  }
+
+  td {
+    padding: #{$cell-pad}rem;
+  }
+
+  tbody tr {
+    &:nth-child(even) {
+      background-color: $blue-lightest;
+    }
+
+    &:hover {
+      color: white;
+      background-color: $blue-light;
+      font-weight: bold;
+      transition: all 0.2s ease-in-out;
+    }
+  }
+
+  p,
+  ul {
+    width: 500px;
+    width: 80vw;
+    margin: 0.3rem auto;
+  }
+}

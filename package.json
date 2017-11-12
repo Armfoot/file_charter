@@ -1,0 +1,46 @@
+{
+  "name": "file_charter",
+  "version": "1.0.0",
+  "description": "Fetches hourly data and builds a chart/table using C3/D3 libraries",
+  "author": "Armfoot",
+  "license": "Apache 2.0",
+  "scripts": {
+    "postinstall": "npm run build",
+    "build": "npm-run-all lint css",
+    "css": "npm-run-all css:precompile css:autoprefix",
+    "css:autoprefix": "postcss --use autoprefixer --replace global.css",
+    "css:precompile": "node-sass --include-path vendor --output-style expanded --output . sass/global.scss",
+    "lint": "npm-run-all --parallel lint:*",
+    "lint:css": "stylelint \"sass/**/*.scss\"",
+    "lint:js": "eslint --ignore-pattern vendor js",
+    "lint:html": "html-validator --verbose --file index.html",
+    "watch:css": "npm run css && onchange \"sass/**/*.scss\" -- npm-run-all css",
+    "watch:lint": "npm run lint && onchange \"sass/**/*.{scss|html|js}\" -- npm run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Armfoot/file_charter.git"
+  },
+  "keywords": [
+    "qualidade",
+    "ar",
+    "Portugal"
+  ],
+  "author": "Armfoot",
+  "license": "Apache 2.0",
+  "readmeFilename": "README.md",
+    "devDependencies": {
+      "autoprefixer": "^6.7.5",
+      "eslint": "^3.16.1",
+      "html-validator-cli": "^3.1.0",
+      "node-sass": "^4.5.0",
+      "npm-run-all": "^4.0.1",
+      "onchange": "^3.2.1",
+      "postcss-cli": "^2.6.0",
+      "stylelint": "^7.9.0",
+      "stylelint-config-standard": "^16.0.0"
+    },
+    "engines": {
+      "node": "^6.11"
+    }
+}

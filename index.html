@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Air Quality Time Chart</title>
+  <link rel="stylesheet" href="global.css">
+  <link href="vendor/c3-v0.4.18.min.css" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <section role="banner">
+      <h1>Air Quality Time Chart</h1>
+      <p class="typewriter"><a title="D3-based chart library" href="//c3js.org" target="_blank">C3.js</a> dynamic chart generator from <a class="fetched-file" title="Download file" href="#" target="_blank">raw data &#x1F4C1;</a></p>
+    </section>
+  </header>
+  <main>
+    <section class="fcharter-input__section">
+      <div class="fcharter-select__wrapper">
+        <label title="Modifies the displayed chart form" for="chart-type">Type</label>
+        <select id="chart-type" autofocus>
+            <option value="line" selected>&#x2197;</option>
+            <option value="spline">&#x219D;</option>
+            <option value="area">&#x1F4C8;</option>
+            <option value="area-spline">&#x1F5E0;</option>
+            <option value="donut">&#x1F787;</option>
+            <option value="pie">&#x25D4;</option>
+            <option value="bar">&#x1F4CA;</option>
+        </select>
+      </div>
+      <div class="fcharter-select__wrapper">
+        <label title="Data from a specific area" for="chosen-region">Region</label>
+        <select id="chosen-region">
+            <option value="Avintes">Avintes</option>
+            <option value="F.SaCarneiro">F. Sá Carneiro</option>
+            <option class="top-separator" value="Ervedeira">Ervedeira</option>
+            <option class="top-separator" value="Av.Liberdade">Avenida da Liberdade</option>
+            <option value="Entrecampos" selected>Entrecampos</option>
+            <option value="Olivais">Olivais</option>
+            <option class="top-separator" value="Chamusca">Chamusca</option>
+            <option value="SantiagoCacem">Santiago do Cacém</option>
+        </select>
+      </div>
+      <div class="fcharter-select__wrapper">
+        <input id="month-radio" name="chart-type" type="radio">
+        <label title="Displays monthly averages" for="month-radio">Year</label>
+        <select id="chosen-year">
+            <option value="2010">2010</option>
+        </select>
+      </div>
+      <div class="fcharter-select__wrapper">
+        <input id="day-radio" name="chart-type" type="radio">
+        <label title="Displays daily averages" for="day-radio">Month</label>
+        <select id="chosen-month">
+            <option value="01">1</option>
+        </select>
+      </div>
+      <div class="fcharter-select__wrapper">
+        <input id="hour-radio" name="chart-type" type="radio" checked>
+        <label title="Displays hourly data (directly from source)" for="hour-radio">Day</label>
+        <select id="chosen-day">
+            <option value="01">1</option>
+        </select>
+      </div>
+    </section>
+    <section class="fcharter-chart__section">
+      <figure id="chart"></figure>
+    </section>
+    <section class="fcharter-datatable__section">
+      <h2>Treated data in µg/m<sup>3</sup></h2>
+      <table>
+        <thead id="data-head"><tr><th></th></tr></thead>
+        <tbody id="data-body"></tbody>
+      </table>
+      <p>A few notes to consider:</p>
+      <ul>
+        <li>The chart can be zoomed by scrolling with the mouse wheel on the chart area.</li>
+        <li>After zooming, the time axis can be shifted leftwards or rightwards by clicking on a chart's point and dragging it accordingly.</li>
+        <li>After a selection is made in any of the closed/collapsed dropdowns the keyboard's left/right or up/down keys can be pressed to change the selected value and dynamically generate the respective data.</li>
+        <li><b>Hourly</b> data is the default source data (read directly from the respective <a class="fetched-file" title="Download file" href="#" target="_blank">source file</a>).</li>
+        <li>By clicking in one of the <b>Year</b> or <b>Month</b> radio buttons, an automatic sum and average is performed on source data.</li>
+        <li>Before performing daily or monthly sums, if a row value is missing, the previous row's value is used. The value 0 is assumed if no previous value was found on the respective day.</li>
+        <li>In the <b>Hourly</b> data, -1 is assigned to empty values before a non-empty value is found on the row, or -10 after these are found.</li>
+        <li>Selecting a different <b>Type</b> only modifies the aspect and visualization of the chart.</li>
+      </ul>
+    </section>
+  </main>
+  <footer>
+    <p>Data samples downloaded from the Environment Portuguese Agency @ <a href="http://qualar.ambiente.pt" target="_blank">qualar.apambiente.pt</a> (November, 2017)<br>
+      Source code @ <a href="https://github.com/Armfoot/file_charter" title="Time Chart by Armfoot" target="_blank">Github</a><p>
+  </footer>
+  <script src="vendor/d3-v3.5.17.min.js" charset="utf-8"></script>
+  <script src="vendor/c3-v0.4.18.min.js"></script>
+  <script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>

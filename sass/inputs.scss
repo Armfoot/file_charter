@@ -1,0 +1,45 @@
+.fcharter-input__section {
+    margin-bottom: 0.6rem;
+
+    @include flex-space(space-around);
+}
+
+.fcharter-select__wrapper {
+  // background: url(http://i62.tinypic.com/15xvbd5.png) no-repeat 96% 0;
+  border-radius: 3px;
+  height: 2rem;
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+  background: url('img/select_arrow.png') no-repeat 96% 0 $blue-dark;
+  color: white;
+  margin: 0 0.3rem 0.4rem;
+
+  &:hover {
+    background-color: $blue-medium;
+  }
+
+  label {
+    cursor: pointer;
+    display: inline-block;
+    width: 5rem;
+    font-weight: bold;
+  }
+
+  select {
+    appearance: none;
+    background: transparent;
+    color: white;
+    border: none;
+    height: 2rem;
+    padding: 0.3rem 3rem 0.3rem 0.7rem;
+    text-overflow: ellipsis;
+    text-align: center;
+    border-left: 2px solid white;
+
+    @include font-size(1);
+
+    &::-ms-expand {
+        display: none; // hide the default arrow in ie10 and ie11
+    }
+  }
+}
