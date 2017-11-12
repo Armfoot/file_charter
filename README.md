@@ -1,6 +1,6 @@
 # Fetch raw time data into chart/table
 
-This is a [C3][1]/[D3][2] example that uses hourly air quality data fetched from text files to a graph/chart and a table.
+This is a [C3][1]/[D3][2] example that uses hourly [air quality data][3] fetched from text files that is depicted into a graph/chart and a table.
 
 Data from a specific date can be directly depicted or daily/monthly averages can be dynamically calculated and depicted by choosing the appropriate dropdowns.
 
@@ -61,7 +61,8 @@ Access to the DOM and auxiliar methods were separated into regions starting with
 
 ### Data
 
-All air quality data samples were downloaded from [qualar.apambiente.pt](//qualar.apambiente.pt). The header names on the top row of each file were modified to the respective chemical formulas.
+All air quality data samples were downloaded from [qualar.apambiente.pt][3]. The header names on the top row of each file were modified to the respective chemical formulas.
 
 [1]: //c3js.org
 [2]: https://d3js.org/
+[3]: //qualar.apambiente.pt
