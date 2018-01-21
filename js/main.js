@@ -2,9 +2,9 @@
 'use strict';
 
 //BOR constants
-const c3 = c3 || {},
-  d3 = d3 || {},
-  defaultTemplate = {
+var c3 = c3 || {},
+    d3 = d3 || {};
+const defaultTemplate = {
     x: { label: { position: 'outer-left' }, type: 'category' },
     y: { label: { text: 'Common scale', position: 'outer-middle' } },
     y2: { show: true, label: { text: 'CO scale', position: 'outer-middle' } }
