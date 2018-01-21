@@ -26,21 +26,21 @@
     "ar",
     "Portugal"
   ],
-  "author": "Armfoot",
-  "license": "Apache 2.0",
   "readmeFilename": "README.md",
-    "devDependencies": {
-      "autoprefixer": "^6.7.5",
-      "eslint": "^3.16.1",
-      "html-validator-cli": "^3.1.0",
-      "node-sass": "^4.5.0",
-      "npm-run-all": "^4.0.1",
-      "onchange": "^3.2.1",
-      "postcss-cli": "^2.6.0",
-      "stylelint": "^7.9.0",
-      "stylelint-config-standard": "^16.0.0"
-    },
-    "engines": {
-      "node": "^6.11"
-    }
+  "devDependencies": {
+    "autoprefixer": "^7.2.5",
+    "eslint": "^4.16.0",
+    "html-validator-cli": "^3.2.0",
+    "node-sass": "^4.7.2",
+    "npm-run-all": "^4.1.2",
+    "onchange": "^3.3.0",
+    "postcss-cli": "^4.1.1",
+    "stylelint": "^8.4.0",
+    "stylelint-config-standard": "^18.0.0",
+    "stylelint-scss": "^2.2.0",
+    "stylelint-config-recommended-scss": "^3.0.0"
+  },
+  "engines": {
+    "node": "^6.11"
+  }
 }

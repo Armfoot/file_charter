@@ -1,6 +1,12 @@
 # Overview of all rules: https://github.com/stylelint/stylelint/blob/master/docs/user-guide/rules.md
 {
-  "extends": "stylelint-config-standard",
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-recommended-scss",
+  ],
+  "plugins": [
+    "stylelint-scss"
+  ],
   "rules": {
     "indentation": null,
     "selector-max-specificity": "0,3,0",
@@ -12,12 +18,14 @@
     "no-missing-end-of-source-newline": null,
     "max-nesting-depth": [
       3,
-      {
-        "ignoreAtRules": [
-          "include",
-          "media"
-        ]
-      }
-    ]
+      { "ignoreAtRules": [ "include", "media"] }
+    ],
+    "scss/selector-no-redundant-nesting-selector": true,
+    "scss/at-mixin-named-arguments": ["always",
+      { "ignore": ["single-argument"] }
+    ],
+    "scss/at-function-named-arguments": ["always",
+      { "ignore": ["single-argument"] }
+    ],
   }
 }

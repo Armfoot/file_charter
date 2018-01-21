@@ -27,7 +27,6 @@
     "no-shadow": ["error"],
     "quotes": ["error", "single", {"allowTemplateLiterals": true}],
     "operator-linebreak": ["error", "after"],
-    // "object-property-newline": ["error"],
     "no-negated-condition": ["error"],
     "no-multiple-empty-lines": ["error", { "max": 1 }],
     "complexity": ["error", 20]

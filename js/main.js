@@ -1,48 +1,25 @@
+/* eslint-disable object-property-newline */
 'use strict';
 
 //BOR constants
-const chr3 = c3,
-      doc3 = d3;
-
-const defaultTemplate = {
-  x: {
-    label: {
-      position: 'outer-left'
-    },
-    type: 'category'
+const c3 = c3 || {},
+  d3 = d3 || {},
+  defaultTemplate = {
+    x: { label: { position: 'outer-left' }, type: 'category' },
+    y: { label: { text: 'Common scale', position: 'outer-middle' } },
+    y2: { show: true, label: { text: 'CO scale', position: 'outer-middle' } }
   },
-  y: {
-    label: {
-      text: 'Common scale',
-      position: 'outer-middle'
-    }
-  },
-  y2: {
-    show: true,
-    label: {
-      text: 'CO scale',
-      position: 'outer-middle'
-    }
-  }
-}
-const dayTemplate = JSON.parse(JSON.stringify(defaultTemplate)),
-      hourTemplate = JSON.parse(JSON.stringify(defaultTemplate)),
-      monthTemplate = JSON.parse(JSON.stringify(defaultTemplate)),
-      ROW_SEP = '\n',
-      CELL_SEP = '\t',
-      DATE_SEP = '/',
-      ROW_REGEX_REPL = [/,/g,'.'],
-      HEADER_ROWS_NUM = 2,
-      MIN_DAYS = 28,
-      MAX_DAYS = 31,
-      MAX_MONTHS = 12,
-      MAX_HOURS = 24,
-      hoursArr = Array(MAX_HOURS).fill().
-                  map((v,i)=>doubleDigi(i)+':00'),
-      daysArr = Array(MAX_DAYS).fill().
-                  map((v,i)=>i+1),
-      monthsArr = Array(MAX_MONTHS).fill().
-                  map((v,i)=>getMonthText(Date.UTC(2017,i,1)));
+  dayTemplate   = JSON.parse(JSON.stringify(defaultTemplate)),
+  hourTemplate  = JSON.parse(JSON.stringify(defaultTemplate)),
+  monthTemplate = JSON.parse(JSON.stringify(defaultTemplate)),
+  ROW_SEP = '\n', CELL_SEP = '\t', DATE_SEP = '/',
+  ROW_REGEX_REPL = [/,/g,'.'],
+  HEADER_ROWS_NUM = 2,
+  MIN_DAYS = 28, MAX_DAYS = 31, MAX_MONTHS = 12, MAX_HOURS = 24,
+  hoursArr = Array(MAX_HOURS).fill().map((v,i)=>doubleDigi(i)+':00'),
+  daysArr = Array(MAX_DAYS).fill().map((v,i)=>i+1),
+  monthsArr = Array(MAX_MONTHS).fill().map(
+                (v,i)=>getMonthText(Date.UTC(2017,i,1)));
 
 dayTemplate.x.label.text = 'Day';
 dayTemplate.x.categories = daysArr;
@@ -53,6 +30,12 @@ monthTemplate.x.categories = monthsArr;
 //EOR
 
 //BOR DOM and Files access/handle functions
+let dayEl  = getEl('chosen-day'),
+  monthEl  = getEl('chosen-month'),
+  yearEl   = getEl('chosen-year'),
+  regionEl = getEl('chosen-region'),
+  ctypeEl  = getEl('chart-type');
+
 function getEl(idStr) {
   return document.getElementById(idStr);
 }
@@ -71,15 +54,9 @@ function appendOption(el, val, txt, classes = []) {
   el.appendChild(opt);
 }
 
-let dayEl    = getEl('chosen-day'),
-    monthEl  = getEl('chosen-month'),
-    yearEl   = getEl('chosen-year'),
-    regionEl = getEl('chosen-region'),
-    ctypeEl  = getEl('chart-type');
-
 function prepSelects() {
   // year filling
-  for (let i = yearEl.value; i <= (new Date()).getFullYear() - 1; i++) {
+  for (let i = yearEl.value; i <= (new Date()).getFullYear() - 2; i++) {
     appendOption(yearEl, i, i);
   }
   (yearEl.firstElementChild||yearEl.firstChild).remove();
@@ -132,14 +109,14 @@ function readFile(operatingFunc) {
 
 function buildTable(ths) {
   // update table headers
-  let th = doc3.select('#data-head tr').selectAll('th').
+  let th = d3.select('#data-head tr').selectAll('th').
     data(ths);
   th.exit().remove();
   th.enter().append('th');
   th.transition().duration(1000).delay((d,i) => i*100).
     text(col => col).style('background-color','#0275d8');
 
-  let tr = doc3.select('#data-body').selectAll('tr');
+  let tr = d3.select('#data-body').selectAll('tr');
   // create maximum rows number (31 days)
   tr = tr.data(Array(MAX_DAYS));
   tr.enter().insert('tr').attr('id', (d,i) => 'row-' + doubleDigi(i));
@@ -217,19 +194,11 @@ function parseAndGen(text, parse) {
     })
   );
 
-  dchart = chr3.generate({
+  dchart = c3.generate({
     bindto: '#chart',
-    data: {
-      rows: rowsArr,
-      axes: {
-        CO: 'y2'
-      },
-      type: ctypeEl.value
-    },
+    data: { rows: rowsArr, axes: { CO: 'y2' }, type: ctypeEl.value },
     axis: curTemplate,
-    zoom: {
-      enabled: true
-    }
+    zoom: { enabled: true }
   });
 }
 
@@ -310,7 +279,7 @@ function yearlyParse() {
           let monthAvgs = dateVals.map(v => (v/(monthDays*24)).round());
           monthsMap.set(date, monthAvgs);
 
-          let td = doc3.select(`#row-${doubleDigi(month - 1)}`).
+          let td = d3.select(`#row-${doubleDigi(month - 1)}`).
                     selectAll('td').data([monthStr, ...monthAvgs]);
           td.exit().remove();
           td.enter().append('td');
@@ -320,7 +289,7 @@ function yearlyParse() {
 
         // remove rows used for other parsing types
         for(let i = monthsMap.size; i < MAX_DAYS; i++) {
-          doc3.select(`#row-${i}`).selectAll('td').remove();
+          d3.select(`#row-${i}`).selectAll('td').remove();
         }
         return [...monthsMap.values()];
       }
@@ -349,11 +318,8 @@ function monthlyParse() {
                           split(CELL_SEP).slice(1);
             // limit row cells to header's number of columns
             rowArr.splice(numCols);
-            prevRowArr = accVals(parseType, daysMap, {
-              curArr: rowArr,
-              curNum: dayNum,
-              prevArr: prevRowArr
-            }, time);
+            prevRowArr = accVals(parseType, daysMap,
+              { curArr: rowArr, curNum: dayNum, prevArr: prevRowArr }, time);
           } else if(row.startsWith(time.y + DATE_SEP + time.m +
                     DATE_SEP + doubleDigi(dayNum + 1))) {
             // following day
@@ -362,11 +328,8 @@ function monthlyParse() {
                           split(CELL_SEP).slice(1);
             // limit row cells to header's number of columns
             rowArr.splice(numCols);
-            prevRowArr = accVals(parseType, daysMap, {
-              curArr: rowArr,
-              curNum: ++dayNum,
-              prevArr: prevRowArr
-            }, time);
+            prevRowArr = accVals(parseType, daysMap,
+              { curArr: rowArr, curNum: ++dayNum, prevArr: prevRowArr }, time);
           }
         }
         // do an average of each day's values and add to table
@@ -375,7 +338,7 @@ function monthlyParse() {
           daysMap.set(date, dayAvgs);
 
           let day = date.substr(-2);
-          let td = doc3.select(`#row-${doubleDigi(day - 1)}`).
+          let td = d3.select(`#row-${doubleDigi(day - 1)}`).
                     selectAll('td').data([day, ...dayAvgs]);
           td.exit().remove();
           td.enter().append('td');
@@ -385,7 +348,7 @@ function monthlyParse() {
 
         // remove rows used for other parsing types
         for(let i = daysMap.size; i < MAX_DAYS; i++) {
-          doc3.select(`#row-${i}`).selectAll('td').remove();
+          d3.select(`#row-${i}`).selectAll('td').remove();
         }
         return [...daysMap.values()];
       }
@@ -416,7 +379,7 @@ function dailyParse() {
                 ...Array(numCols - rowArr.length).fill(-10)];
             }
             let hour = row.substr(row.indexOf(' ') + 1,2);
-            let td = doc3.select(`#row-${hour}`).selectAll('td').
+            let td = d3.select(`#row-${hour}`).selectAll('td').
               data([hour, ...rowArr]);
             td.exit().remove();
             td.enter().append('td');
@@ -428,7 +391,7 @@ function dailyParse() {
         }
         // remove rows used for other parsing types
         for(let i=24; i < MAX_DAYS; i++) {
-          doc3.select(`#row-${i}`).selectAll('td').remove();
+          d3.select(`#row-${i}`).selectAll('td').remove();
         }
         return rowsArr;
       }
