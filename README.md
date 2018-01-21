@@ -52,12 +52,12 @@ The only CSS file generated is `global.css`, which is a compilation of the sever
 
 ### Javascript
 
-[C3.js][1] and [D3.js (version 3.5.17)][2] libraries were used to respectively construct the chart and the table. These were not added as `devDependencies` in `package.json`, they are directly read from the `/vendor` folder and therefore c3 and d3 variables will be undefined after running `npm install` (which executes `npm run build` at the end).
+[C3.js][1] and [D3.js (version 3.5.17)][2] libraries were used to respectively construct the chart and the table. These were not added as `devDependencies` in `package.json`, they are directly read from the `/vendor` folder.
 
 `main.js` uses *strict* mode, ES6 features and the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) to get the data-files.
 Access to the DOM and auxiliar methods were separated into regions starting with `//BOR` and ending with `//EOR`.
 
-`cors-fetch.js` is an alternative data-fetching method which performs a direct `POST` request to the server holding the data. For this method to be used by a different domain, a header must be set on the server (e.g. `Header set Access-Control-Allow-Origin "*"`).
+`cors-fetch.js` is an alternative data-fetching method (currently commented) which performs a direct `POST` request to the server holding the data. For this method to be used by a different domain, a header must be set on the server (e.g. `Header set Access-Control-Allow-Origin "*"`).
 
 ### Data
 
