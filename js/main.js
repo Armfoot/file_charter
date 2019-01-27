@@ -19,7 +19,7 @@ const defaultTemplate = {
   hoursArr = Array(MAX_HOURS).fill().map((v,i)=>doubleDigi(i)+':00'),
   daysArr = Array(MAX_DAYS).fill().map((v,i)=>i+1),
   monthsArr = Array(MAX_MONTHS).fill().map(
-                (v,i)=>getMonthText(Date.UTC(2017,i,1)));
+                (v,i)=>getMonthText(Date.UTC(2018,i,1)));
 
 dayTemplate.x.label.text = 'Day';
 dayTemplate.x.categories = daysArr;
@@ -55,8 +55,8 @@ function appendOption(el, val, txt, classes = []) {
 }
 
 function prepSelects() {
-  // year filling
-  for (let i = yearEl.value; i <= (new Date()).getFullYear() - 2; i++) {
+  // year filling; for dynamic year: (new Date()).getFullYear() - 1
+  for (let i = yearEl.value; i <= 2017; i++) {
     appendOption(yearEl, i, i);
   }
   (yearEl.firstElementChild||yearEl.firstChild).remove();
@@ -98,7 +98,7 @@ function readFile(operatingFunc) {
   let filePath = `data/${regionEl.value}-${yearEl.value}.xls`,
       fileRefEls = getElsByClass('fetched-file');
   // dynamically change href values that pointing to data-file
-  for (var i = fileRefEls.length - 1; i >= 0; i--) {
+  for (let i = fileRefEls.length - 1; i >= 0; i--) {
     fileRefEls[i].attributes.href.value = filePath;
   }
 

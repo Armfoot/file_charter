@@ -65,4 +65,7 @@ typings/
 .sass-cache/
 *.css.map
 
+### Data ###
+data/*_o.xls
+
 # End of https://www.gitignore.io/api/node,sass
