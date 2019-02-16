@@ -239,33 +239,22 @@ function yearlyParse() {
       fun: (dataRows, time) => {
         let monthNum = 1,
             monthsMap = new Map(),
+            yStr = time.y + DATE_SEP,
             // exclude date
-            numCols = dataRows[0].split(CELL_SEP).filter(v => v).length - 1;
-        // use header to create a dummy row with 0's
-        let prevRowArr = Array(numCols).fill(0);
+            numCols = dataRows[0].split(CELL_SEP).filter(v => v).length - 1,
+            // use header to create a dummy row with 0's
+            prevRowArr = Array(numCols).fill(0);
         // exclude first couple of rows
         for(let row of dataRows.slice(HEADER_ROWS_NUM)) {
-          if(row.startsWith(time.y + DATE_SEP + doubleDigi(monthNum))){
-            // remove date and convert values for accumulation
-            let rowArr = row.replace(...ROW_REGEX_REPL).
-                          split(CELL_SEP).slice(1);
-            // limit row cells to header's number of columns
-            rowArr.splice(numCols);
+          if(row.startsWith(yStr)){
             prevRowArr = accVals(parseType, monthsMap, {
-              curArr: rowArr,
-              curNum: monthNum,
-              prevArr: prevRowArr
-            }, time);
-          } else if(row.startsWith(time.y + DATE_SEP + doubleDigi(monthNum+1))) {
-            // following month
-            // remove date and convert values for accumulation
-            let rowArr = row.replace(...ROW_REGEX_REPL).
-                          split(CELL_SEP).slice(1);
-            // limit row cells to header's number of columns
-            rowArr.splice(numCols);
-            prevRowArr = accVals(parseType, monthsMap, {
-              curArr: rowArr,
-              curNum: ++monthNum,
+              // remove date and convert values for accumulation
+              curArr: row.replace(...ROW_REGEX_REPL).
+                // limit row cells to header's number of columns
+                split(CELL_SEP).slice(1, numCols + 1),
+              // increment day if the day is no longer the current day
+              curNum: row.startsWith(yStr + doubleDigi(monthNum)) ?
+                monthNum : ++monthNum,
               prevArr: prevRowArr
             }, time);
           }
@@ -305,31 +294,24 @@ function monthlyParse() {
       fun: (dataRows, time) => {
         let dayNum = 1,
             daysMap = new Map(),
+            yMStr = time.y + DATE_SEP + time.m + DATE_SEP,
             // exclude date
-            numCols = dataRows[0].split(CELL_SEP).filter(v => v).length - 1;
-        // use header to create a dummy row with 0's
-        let prevRowArr = Array(numCols).fill(0);
+            numCols = dataRows[0].split(CELL_SEP).filter(v => v).length - 1,
+            // use header to create a dummy row with 0's
+            prevRowArr = Array(numCols).fill(0);
         // exclude first couple of rows
         for(let row of dataRows.slice(HEADER_ROWS_NUM)) {
-          if(row.startsWith(time.y + DATE_SEP + time.m +
-                            DATE_SEP + doubleDigi(dayNum))){
-            // remove date and convert values for accumulation
-            let rowArr = row.replace(...ROW_REGEX_REPL).
-                          split(CELL_SEP).slice(1);
-            // limit row cells to header's number of columns
-            rowArr.splice(numCols);
-            prevRowArr = accVals(parseType, daysMap,
-              { curArr: rowArr, curNum: dayNum, prevArr: prevRowArr }, time);
-          } else if(row.startsWith(time.y + DATE_SEP + time.m +
-                    DATE_SEP + doubleDigi(dayNum + 1))) {
-            // following day
-            // remove date and convert values for accumulation
-            let rowArr = row.replace(...ROW_REGEX_REPL).
-                          split(CELL_SEP).slice(1);
-            // limit row cells to header's number of columns
-            rowArr.splice(numCols);
-            prevRowArr = accVals(parseType, daysMap,
-              { curArr: rowArr, curNum: ++dayNum, prevArr: prevRowArr }, time);
+          if(row.startsWith(yMStr)){
+            prevRowArr = accVals(parseType, daysMap, {
+              // remove date and convert values for accumulation
+              curArr: row.replace(...ROW_REGEX_REPL).
+                // limit row cells to header's number of columns
+                split(CELL_SEP).slice(1, numCols + 1),
+              // increment day if the day is no longer the current day
+              curNum: row.startsWith(yMStr + doubleDigi(dayNum)) ?
+                dayNum : ++dayNum,
+              prevArr: prevRowArr
+            }, time);
           }
         }
         // do an average of each day's values and add to table
