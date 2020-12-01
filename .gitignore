@@ -66,6 +66,6 @@ typings/
 *.css.map
 
 ### Data ###
-data/*_o.xls
+data/.todo
 
 # End of https://www.gitignore.io/api/node,sass

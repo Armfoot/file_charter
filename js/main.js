@@ -15,11 +15,11 @@ const defaultTemplate = {
   ROW_SEP = '\n', CELL_SEP = '\t', DATE_SEP = '/',
   ROW_REGEX_REPL = [/,/g,'.'],
   HEADER_ROWS_NUM = 2,
-  MIN_DAYS = 28, MAX_DAYS = 31, MAX_MONTHS = 12, MAX_HOURS = 24,
+  MIN_DAYS = 28, MAX_DAYS = 31, MAX_MONTHS = 12, MAX_HOURS = 24, UPDATE_YEAR=2020,
   hoursArr = Array(MAX_HOURS).fill().map((v,i)=>doubleDigi(i)+':00'),
   daysArr = Array(MAX_DAYS).fill().map((v,i)=>i+1),
   monthsArr = Array(MAX_MONTHS).fill().map(
-                (v,i)=>getMonthText(Date.UTC(2018,i,1)));
+                (v,i)=>getMonthText(Date.UTC(UPDATE_YEAR,i,1)));
 
 dayTemplate.x.label.text = 'Day';
 dayTemplate.x.categories = daysArr;
@@ -30,7 +30,7 @@ monthTemplate.x.categories = monthsArr;
 //EOR
 
 //BOR DOM and Files access/handle functions
-let dayEl  = getEl('chosen-day'),
+const dayEl  = getEl('chosen-day'),
   monthEl  = getEl('chosen-month'),
   yearEl   = getEl('chosen-year'),
   regionEl = getEl('chosen-region'),
@@ -45,9 +45,9 @@ function getElsByClass(classStr) {
 }
 
 function appendOption(el, val, txt, classes = []) {
-  let opt = document.createElement('option');
+  const opt = document.createElement('option');
   opt.value = val;
-  for(let c of classes) {
+  for(const c of classes) {
     opt.classList.add(c);
   }
   opt.appendChild(document.createTextNode(txt));
@@ -56,7 +56,7 @@ function appendOption(el, val, txt, classes = []) {
 
 function prepSelects() {
   // year filling; for dynamic year: (new Date()).getFullYear() - 1
-  for (let i = yearEl.value; i <= 2017; i++) {
+  for (let i = yearEl.value; i < UPDATE_YEAR; i++) {
     appendOption(yearEl, i, i);
   }
   (yearEl.firstElementChild||yearEl.firstChild).remove();
@@ -81,7 +81,7 @@ function prepSelects() {
 
 function changeDisplayedDays(y, m) {
   // hide days according to month
-  let monthDays = daysInMonth(y, m),
+  const monthDays = daysInMonth(y, m),
       days2HideI = MAX_DAYS - monthDays,
       days2ShowI = monthDays - MIN_DAYS - 1;
   for (let i = days2ShowI; i >= 0; i--) {
@@ -95,7 +95,7 @@ function changeDisplayedDays(y, m) {
 }
 
 function readFile(operatingFunc) {
-  let filePath = `data/${regionEl.value}-${yearEl.value}.xls`,
+  const filePath = `data/${regionEl.value}-${yearEl.value}.xls`,
       fileRefEls = getElsByClass('fetched-file');
   // dynamically change href values that pointing to data-file
   for (let i = fileRefEls.length - 1; i >= 0; i--) {
@@ -109,7 +109,7 @@ function readFile(operatingFunc) {
 
 function buildTable(ths) {
   // update table headers
-  let th = d3.select('#data-head tr').selectAll('th').
+  const th = d3.select('#data-head tr').selectAll('th').
     data(ths);
   th.exit().remove();
   th.enter().append('th');
@@ -132,7 +132,7 @@ function buildTable(ths) {
  *
  */
 function getMonthText(dt) {
-  let mstr = new Intl.DateTimeFormat(undefined, {month: 'long'}).
+  const mstr = new Intl.DateTimeFormat(undefined, {month: 'long'}).
               format(dt);
   return mstr[0].toLocaleUpperCase() + mstr.substr(1);
 }
@@ -163,7 +163,7 @@ Number.prototype.round = function (decimals) {
 let dchart;
 
 function parseAndGen(text, parse) {
-  let year  = yearEl.value,
+  const year  = yearEl.value,
       month = monthEl.value,
       day   = dayEl.value,
       dataRows = text.split(ROW_SEP),
@@ -207,7 +207,7 @@ function accVals(type, hashMap, rows, time) {
     // empty column values get previous row values or 0
     map((v,i) => v === '' ? rows.prevArr[i]: Number(v));
   if(rowArr.length) {
-    let numMissing = rows.prevArr.length - rowArr.length,
+    const numMissing = rows.prevArr.length - rowArr.length,
         hourArr = numMissing > 0 ? [...rowArr,
           // values missing at the end get previous row values
           ...Array(numMissing).fill(0).
@@ -215,11 +215,11 @@ function accVals(type, hashMap, rows, time) {
           [...rowArr];
     // preserve the current row with all fields for next iteration
     rowArr = [...hourArr];
-    let hashKey = time.y + (type === 'days' ? DATE_SEP + time.m: '') +
+    const hashKey = time.y + (type === 'days' ? DATE_SEP + time.m: '') +
                   DATE_SEP + doubleDigi(rows.curNum);
     if(hashMap.has(hashKey)) {
       // add previous values to rowArr
-      let typeOldArr = hashMap.get(hashKey);
+      const typeOldArr = hashMap.get(hashKey);
       for(let i = typeOldArr.length - 1; i >= 0; i--) {
         hourArr[i] += typeOldArr[i];
       }
@@ -233,19 +233,19 @@ function accVals(type, hashMap, rows, time) {
 
 function yearlyParse() {
   readFile(text => {
-    let parseType = 'months';
+    const parseType = 'months';
     parseAndGen(text, {
       type: parseType,
       fun: (dataRows, time) => {
-        let monthNum = 1,
-            monthsMap = new Map(),
-            yStr = time.y + DATE_SEP,
-            // exclude date
-            numCols = dataRows[0].split(CELL_SEP).filter(v => v).length - 1,
-            // use header to create a dummy row with 0's
-            prevRowArr = Array(numCols).fill(0);
+        let monthNum = 1;
+        const monthsMap = new Map(),
+              yStr = time.y + DATE_SEP,
+              // exclude date
+              numCols = dataRows[0].split(CELL_SEP).filter(v => v).length - 1;
+        // use header to create a dummy row with 0's
+        let prevRowArr = Array(numCols).fill(0);
         // exclude first couple of rows
-        for(let row of dataRows.slice(HEADER_ROWS_NUM)) {
+        for(const row of dataRows.slice(HEADER_ROWS_NUM)) {
           if(row.startsWith(yStr)){
             prevRowArr = accVals(parseType, monthsMap, {
               // remove date and convert values for accumulation
@@ -260,15 +260,15 @@ function yearlyParse() {
           }
         }
         // do an average of each day's values and add to table
-        for(let [date, dateVals] of monthsMap) {
-          let month = date.substr(-2),
+        for(const [date, dateVals] of monthsMap) {
+          const month = date.substr(-2),
               monthStr = getMonthText(new Date(date + '/01')),
               monthDays = daysInMonth(...date.split(DATE_SEP));
           // divide by number of days of the month multiplied by 24 hours/rows
-          let monthAvgs = dateVals.map(v => (v/(monthDays*24)).round());
+          const monthAvgs = dateVals.map(v => (v/(monthDays*24)).round());
           monthsMap.set(date, monthAvgs);
 
-          let td = d3.select(`#row-${doubleDigi(month - 1)}`).
+          const td = d3.select(`#row-${doubleDigi(month - 1)}`).
                     selectAll('td').data([monthStr, ...monthAvgs]);
           td.exit().remove();
           td.enter().append('td');
@@ -288,19 +288,19 @@ function yearlyParse() {
 
 function monthlyParse() {
   readFile(text => {
-    let parseType = 'days';
+    const parseType = 'days';
     parseAndGen(text, {
       type: parseType,
       fun: (dataRows, time) => {
-        let dayNum = 1,
-            daysMap = new Map(),
-            yMStr = time.y + DATE_SEP + time.m + DATE_SEP,
-            // exclude date
-            numCols = dataRows[0].split(CELL_SEP).filter(v => v).length - 1,
-            // use header to create a dummy row with 0's
-            prevRowArr = Array(numCols).fill(0);
+        let dayNum = 1;
+        const daysMap = new Map(),
+              yMStr = time.y + DATE_SEP + time.m + DATE_SEP,
+              // exclude date
+              numCols = dataRows[0].split(CELL_SEP).filter(v => v).length - 1;
+        // use header to create a dummy row with 0's
+        let prevRowArr = Array(numCols).fill(0);
         // exclude first couple of rows
-        for(let row of dataRows.slice(HEADER_ROWS_NUM)) {
+        for(const row of dataRows.slice(HEADER_ROWS_NUM)) {
           if(row.startsWith(yMStr)){
             prevRowArr = accVals(parseType, daysMap, {
               // remove date and convert values for accumulation
@@ -315,12 +315,12 @@ function monthlyParse() {
           }
         }
         // do an average of each day's values and add to table
-        for(let [date, dateVals] of daysMap) {
-          let dayAvgs = dateVals.map(v => (v/24).round()); //24 hours
+        for(const [date, dateVals] of daysMap) {
+          const dayAvgs = dateVals.map(v => (v/24).round()); //24 hours
           daysMap.set(date, dayAvgs);
 
-          let day = date.substr(-2);
-          let td = d3.select(`#row-${doubleDigi(day - 1)}`).
+          const day = date.substr(-2);
+          const td = d3.select(`#row-${doubleDigi(day - 1)}`).
                     selectAll('td').data([day, ...dayAvgs]);
           td.exit().remove();
           td.enter().append('td');
@@ -343,7 +343,7 @@ function dailyParse() {
     parseAndGen(text, {
       type: 'hours',
       fun: (dataRows, time) => {
-        let rowsArr = [],
+        const rowsArr = [],
             // exclude date
             numCols = dataRows[0].split(CELL_SEP).filter(v => v).length - 1;
         // exclude first couple of rows
@@ -360,8 +360,8 @@ function dailyParse() {
                 // assign -10 to values that are missing from the row
                 ...Array(numCols - rowArr.length).fill(-10)];
             }
-            let hour = row.substr(row.indexOf(' ') + 1,2);
-            let td = d3.select(`#row-${hour}`).selectAll('td').
+            const hour = row.substr(row.indexOf(' ') + 1,2);
+            const td = d3.select(`#row-${hour}`).selectAll('td').
               data([hour, ...rowArr]);
             td.exit().remove();
             td.enter().append('td');
@@ -432,7 +432,9 @@ function hourChartOn() {
 document.addEventListener('DOMContentLoaded', () => {
   prepSelects();
 
-  let hourRad  = getEl('hour-radio'),
+  getEl('up-year').innerText = UPDATE_YEAR;
+
+  const hourRad  = getEl('hour-radio'),
       dayRad   = getEl('day-radio'),
       monthRad = getEl('month-radio');
 
