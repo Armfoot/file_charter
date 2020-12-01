@@ -4,11 +4,17 @@ This is a [C3][1]/[D3][2] example that uses hourly [air quality data][3] fetched
 
 Data from a specific date can be directly depicted or daily/monthly averages can be dynamically calculated and depicted by choosing the appropriate dropdowns.
 
+![File Charter screenshot: data from Olivais on September 2019](img/2019_Sep-Olivais.png)
+
 ## Usage
 
-Access directly the [project Github page](//armfoot.github.io/file_charter) or clone/download the project and open index.html in a browser.
+### 1. Access the _Live Demo_ on [armfoot.github.io/file_charter](https://armfoot.github.io/file_charter)
 
-Use the `select` dropdowns for updating the chart/table values or changing the type of chart to depict. A few notes to consider:
+You might also clone/download the project and open directly _index.html_ in a modern browser or run [live-server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) in the project's root.
+
+### 2. Use the `select` dropdowns
+
+These will update the chart and table values or change the chart type to show. A few notes to consider:
 
 * The chart can be zoomed by scrolling with the mouse wheel on the chart area.
 * After zooming, the time axis can be shifted leftwards or rightwards by clicking on a chart's point and dragging it accordingly.
@@ -20,27 +26,17 @@ Use the `select` dropdowns for updating the chart/table values or changing the t
 * Selecting a different **Type** only modifies the aspect and visualization of the chart.
 
 
-### Instructions for developers
+### 3. For developers
 
-Several CSS/SASS and Lint packages can be installed by executing the [Node.js Package Manager](https://www.npmjs.com/get-npm) in the root (`package.json`'s folder):
+Linting and style watches:
 
-    npm install
-
-A `node_modules` will be created in the root with the downloaded packages and the following will be automatically executed after a successful install:
-
-    npm run build
-
-Console output may then be useful for linting:
-
-- `npm run watch:lint` - lint errors output will be provided every time an HTML, JS or SASS file is saved.
+- `npm run watch:lint` - errors output will be provided every time an HTML, JS or SASS file is saved.
 - `npm run watch:css` - any `*.scss` change results in a new CSS file (SASS pre-processor) with the browser-specific prefixes added by the [autoprefixer](https://github.com/postcss/autoprefixer).
 
-### IDE configuration
-
-Your IDE may be further configured by using the following plugins:
-- [`.editorconfig`](http://editorconfig.org/#download)
-- [`.stylelintrc`](https://github.com/stylelint/stylelint/blob/master/docs/user-guide/complementary-tools.md#editor-plugins)
-- [`.eslintrc`](http://eslint.org/docs/user-guide/integrations#editors)
+Possible IDE configuration:
+- [.editorconfig](http://editorconfig.org/#download)
+- [.stylelintrc](https://github.com/stylelint/stylelint/blob/master/docs/user-guide/complementary-tools.md#editor-plugins)
+- [.eslintrc](http://eslint.org/docs/user-guide/integrations#editors)
 
 ## Structure
 
